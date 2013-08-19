@@ -1,0 +1,43 @@
+{
+  "messages": [
+    {
+      "message": "Samla location under egen key?",
+      "location": "page, post, taxonomy, user, plugin, my_post_type, dashboard, my_post_type-overview"
+    },
+    {
+      "message": "Detta meddelande syns överst på varje post, page eller custom post type"
+    },
+    {
+      "message": "Jag syns bara på sidor",
+      "location": "page",
+    },
+    {
+      "message": "På dashboard syns jag",
+      "location": "dashboard"
+    },
+    {
+      "message": "Denna post type används för att ... kort info på översiktssidan för en post type",
+      "location": "my_post_type-overview"
+    },
+    {
+      "message": "Jag syns på sidor som har en slug/permalänk som börjar med footer- eller header-",
+      "location": "page",
+      "post_slug": "footer-*, header-*"
+    },
+    {
+      "message": "Information kan äves visas bara för vissa användare",
+      "post_type": "some_custom_post_type",
+      "capability": "footer-*, header-*"
+    },
+    {
+      "message": "Detta meddelande syns bara på poster av typen page eller my_custom_post_type. Det syns på höger sida, och är synlig bara för användare som får redigera sidor eller hantera inställningar. Dock är meddelandet begränsat så det bara syns på sidor som har slug my_slug eller en slug som börjar med texts-header",
+      "location": "page, my_custom_post_type",
+      "capability": "edit_posts,manage_options",
+      "post_slug": "my-slug,texts-header-*"
+    },
+    {
+      "message_en-US": "This message will be shown only to admin users with en-US as their admin language",
+      "message_sv-SE": "Detta meddelande syns endast för admins med svenska som språk"
+    }
+  ]
+}
