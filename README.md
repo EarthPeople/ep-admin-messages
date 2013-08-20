@@ -7,12 +7,12 @@ Plugin från EarthPeople för att informera kunder om saker i admin.
 
 ## Todo
 
-[x] Get the plugin the kinda work
-[ ] Add option so messages can be put in metabox on dashboard and post type
-[ ] Write this file in english
-[ ] Make this file a proper wp readme
-[ ] Add files for translation
-[ ] Make a build script that automagically pushes a new svn version based on this git version
+- [x] Get the plugin the kinda work
+- [ ] Add option so messages can be put in metabox on dashboard and post type
+- [ ] Write this file in english
+- [ ] Make this file a proper wp readme
+- [ ] Add files for translation
+- [ ] Make a build script that automagically pushes a new svn version based on this git version
 
 ## Tankar och idéer:
 
