@@ -105,6 +105,20 @@ class Ep_Admin_Messages {
 							if ( "edit" === $current_screen->base && $location_post_type === $current_screen->post_type )
 								$do_show_location = true;
 
+						} elseif ( strpos( $one_location, "post_type_metabox:" ) !== false ) {
+							
+							// Location is a post type overview screen
+
+							$location_post_type = str_replace("post_type_metabox:", "", $one_location);
+
+							if ( empty($location_post_type) )
+								continue;
+
+							if ( "post" === $current_screen->base && $location_post_type === $current_screen->post_type ) {
+								$do_show_location = true;
+								$position = "meta_box";
+							}
+
 						} elseif ( "dashboard" === $one_location ) {
 
 							if ( "dashboard" === $current_screen->base  )
@@ -192,17 +206,32 @@ class Ep_Admin_Messages {
 
 				}
 
-				// Show message at admin_notices/top
-				// Works for all screens
-				if ( $do_show && "admin_notices" === $position ) {
+				if ( $do_show ) {
+
+					if ( "admin_notices" === $position ) {
 					
-					add_action("admin_notices", function() use ($one_message) {
-						?>
-						<div class="updated">
-							<p><?php echo $one_message->message ?></p>
-						</div>
-						<?php
-					});
+						// Show message at admin_notices/top
+						// Works for all screens
+						add_action("admin_notices", function() use ($one_message) {
+							?>
+							<div class="updated">
+								<p><?php echo $one_message->message ?></p>
+							</div>
+							<?php
+						});
+
+					} elseif ( "meta_box" === $position ) {
+
+						// Show message in a meta box on the edit post screen
+						$meta_box_priority = "high"; // high', 'core', 'default' or 'low'
+						$meta_box_title = __("Admin Message", "ep-admin-message");
+						add_meta_box( "", $meta_box_title, function() use ($one_message, $message_to_show) {
+							?>
+							<?php echo $message_to_show ?>
+							<?php
+						}, $post->post_type, "side", $meta_box_priority );
+
+					}
 
 				}
 
