@@ -61,8 +61,10 @@ class Ep_Admin_Messages {
 				// Detect language
 				// @todo: Actually detect language
 				$message_to_show = "";
-				if ( ! empty( $one_message->message ) )
+				if ( ! empty( $one_message->message ) ) {
 					$message_to_show = $one_message->message;
+					if ( is_array($message_to_show)) $message_to_show = join($message_to_show);
+				}
 
 				
 				// Determine if message should be shown on current screen
@@ -212,10 +214,10 @@ class Ep_Admin_Messages {
 					
 						// Show message at admin_notices/top
 						// Works for all screens
-						add_action("admin_notices", function() use ($one_message) {
+						add_action("admin_notices", function() use ($one_message, $message_to_show) {
 							?>
 							<div class="updated">
-								<p><?php echo $one_message->message ?></p>
+								<p><?php echo $message_to_show ?></p>
 							</div>
 							<?php
 						});
@@ -225,7 +227,8 @@ class Ep_Admin_Messages {
 						// Show message in a meta box on the edit post screen
 						$meta_box_priority = "high"; // high', 'core', 'default' or 'low'
 						$meta_box_title = __("Admin Message", "ep-admin-message");
-						add_meta_box( "", $meta_box_title, function() use ($one_message, $message_to_show) {
+						$meta_box_id = "ep-admin-message-" . md5( json_encode($one_message) );
+						add_meta_box( $meta_box_id, $meta_box_title, function() use ($one_message, $message_to_show) {
 							?>
 							<?php echo $message_to_show ?>
 							<?php
