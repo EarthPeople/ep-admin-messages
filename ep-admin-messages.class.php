@@ -24,59 +24,6 @@ class Ep_Admin_Messages {
 
 	}
 
-	/*
-
-	where we are in wp can be determined using the wp screen object
-
-	WP_Screen Object
-
-	dashboard
-	    [base] => dashboard
-	    [id] => dashboard
-
-	WordPress Updates / update core
-	    [base] => update-core
-	    [id] => update-core
-	
-	pages overview / edit.php?post_type=page
-	    [base] => edit
-	    [id] => edit-page
-    	[post_type] => page
-	
-	page add new / post-new.php?post_type=page
-	    [action] => add
-	    [base] => post
-	    [id] => page
-        [post_type] => page
-	
-	page edit / post.php?post=749&action=edit
-	    [base] => post
-	    [id] => page
-        [post_type] => page
-
-    post overview
-   	    [base] => edit
-        [id] => edit-post
-        [post_type] => post
-
-    post new
-        [action] => add
-        [base] => post
-        [id] => post
-        [post_type] => post
-
-	media
-	    [base] => upload
-        [id] => upload
-
-    custom post overview (js error log)
-   	    [base] => edit
-	    [id] => edit-js_error_log
-        [post_type] => js_error_log
-
-	*/
-
-
 	function setup_messages() {
 
 		$current_screen = get_current_screen();
@@ -166,6 +113,10 @@ class Ep_Admin_Messages {
 								$do_show_location = true;
 						
 						} // if check locations
+
+						// @todo: should we just be able to query any screen in the config?
+						// Like: "screen_base:upload"
+						// However problems with multiple conditions
 						
 						#sf_d( $current_screen );
 
