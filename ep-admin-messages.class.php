@@ -28,6 +28,19 @@ class Ep_Admin_Messages {
 
 		$current_screen = get_current_screen();
 
+		// If current screen is showing a post then get the post
+		if ( "post" === $current_screen->base ) {
+			
+			$post_id = 0;
+			if ( isset( $_GET['post'] ) )
+			 	$post_id = $post_ID = (int) $_GET['post'];
+			elseif ( isset( $_POST['post_ID'] ) )
+			 	$post_id = $post_ID = (int) $_POST['post_ID'];
+
+			 $post = get_post($post_id);
+
+		 }
+
 		if ( isset( $this->config->messages ) ) {
 
 			foreach ( $this->config->messages as $one_message ) {
@@ -125,47 +138,66 @@ class Ep_Admin_Messages {
 					if ( ! $do_show_location )
 						$do_show = false;
 
-					/*
-					post_type:my_post_type
-					post_type:post
-					post_type:page
-					post_type_overview:my_post_type
-					post_type_overview:page
-					taxonomy:my_taxonomy
-					dashboard
-					user
-					profile
-					plugin
-
-					Array
-					(
-					    [0] => page
-					    [1] => post
-					    [2] => taxonomy
-					    [3] => user
-					    [4] => plugin
-					    [5] => my_post_type
-					    [6] => dashboard
-					    [7] => my_post_type:overview
-					    [10] => aaa
-					    [12] => bbb
-					)
-					*/
 				}
 
 				// If capabilites is set then limit who to show to
-				if ( ! empty( $capabilites ) ) {
-					#$do_show = false;
+				// User need to have at least of the capabilities
+				if ( ! empty( $capabilities ) ) {
+
+					$do_show_capability = false;
+
+					foreach ( $capabilities as $one_capability ) {
+
+						if ( current_user_can( $one_capability ) ) {
+							$do_show_capability = true;
+							break;
+						}
+
+					}
+
+					if ( ! $do_show_capability )
+						$do_show = false;
 				}
 				
 				// If post_slugs is set then limit who to show to
 				if ( ! empty( $post_slugs ) ) {
-					#$do_show = false;
+
+					$do_show_post_slug = false;
+
+					if ( ! empty( $post ) ) {
+					
+						foreach ( $post_slugs as $one_slug ) {
+
+							// check post slug for exact match 
+							if ( $one_slug === $post->post_name ) {
+								$do_show_post_slug = true;
+								break;
+							}
+
+							// check post slug for partial match, if one_slug ends with wildcard (*)
+							if ( strpos( $one_slug, "*" ) !== false ) {
+								
+								// found a wildcard, match a regexp out of it
+								$regexp = "/" . str_replace("*", ".+", $one_slug) . "/";
+								if ( preg_match($regexp, $post->post_name) === 1) {
+									$do_show_post_slug = true;
+									break;
+								}
+
+							}
+						}
+
+					} // if not empty post
+
+					if ( ! $do_show_post_slug )
+						$do_show = false;
+
 				}
 
 				// Show message at admin_notices/top
 				// Works for all screens
 				if ( $do_show && "admin_notices" === $position ) {
+					
 					add_action("admin_notices", function() use ($one_message) {
 						?>
 						<div class="updated">
@@ -173,6 +205,7 @@ class Ep_Admin_Messages {
 						</div>
 						<?php
 					});
+
 				}
 
 			}
