@@ -118,12 +118,12 @@ class Ep_Admin_Messages {
 				if ( ! empty( $locations ) ) {
 					
 					$do_show_location = false;
-					#sf_d($locations);
 
 					foreach ($locations as $one_location) {
 						
-						// Check if location is a post type, i.e. location begins with "post_type:"
 						if ( strpos( $one_location, "post_type:" ) !== false ) {
+
+							// Location is a post type, i.e. location begins with "post_type:"
 
 							$location_post_type = str_replace("post_type:", "", $one_location);
 							
@@ -133,10 +133,9 @@ class Ep_Admin_Messages {
 							if ( "post" === $current_screen->base && $location_post_type === $current_screen->post_type )
 								$do_show_location = true;
 
-						}
-
-						// Check if location is a post type overview screen
-						if ( strpos( $one_location, "post_type_overview:" ) !== false ) {
+						} elseif ( strpos( $one_location, "post_type_overview:" ) !== false ) {
+							
+							// Location is a post type overview screen
 
 							$location_post_type = str_replace("post_type_overview:", "", $one_location);
 							
@@ -144,6 +143,11 @@ class Ep_Admin_Messages {
 								continue;
 
 							if ( "edit" === $current_screen->base && $location_post_type === $current_screen->post_type )
+								$do_show_location = true;
+
+						} elseif ( "dashboard" === $one_location ) {
+
+							if ( "dashboard" === $current_screen->base  )
 								$do_show_location = true;
 
 						}
