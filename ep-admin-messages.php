@@ -4,7 +4,7 @@ Plugin Name: EP Admin Messages
 Plugin URI: http://earthpeople.se/
 Description: Show custom messages in the admin area
 Version: 0.1
-Author: Earth People, Pär Thernström
+Author: Earth People
 Author URI: http://earthpeople.se/
 License: GPL2
 */
