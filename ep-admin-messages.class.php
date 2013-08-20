@@ -120,9 +120,9 @@ class Ep_Admin_Messages {
 					$do_show_location = false;
 					#sf_d($locations);
 
-					// Check if location is a post type, i.e. location begins with "post_type:"
 					foreach ($locations as $one_location) {
 						
+						// Check if location is a post type, i.e. location begins with "post_type:"
 						if ( strpos( $one_location, "post_type:" ) !== false ) {
 
 							$location_post_type = str_replace("post_type:", "", $one_location);
@@ -134,6 +134,20 @@ class Ep_Admin_Messages {
 								$do_show_location = true;
 
 						}
+
+						// Check if location is a post type overview screen
+						if ( strpos( $one_location, "post_type_overview:" ) !== false ) {
+
+							$location_post_type = str_replace("post_type_overview:", "", $one_location);
+							
+							if ( empty($location_post_type) )
+								continue;
+
+							if ( "edit" === $current_screen->base && $location_post_type === $current_screen->post_type )
+								$do_show_location = true;
+
+						}
+
 					}
 
 					if ( ! $do_show_location )
