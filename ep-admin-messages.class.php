@@ -130,8 +130,6 @@ class Ep_Admin_Messages {
 						// @todo: should we just be able to query any screen in the config?
 						// Like: "screen_base:upload"
 						// However problems with multiple conditions
-						
-						#sf_d( $current_screen );
 
 					}
 
