@@ -116,17 +116,65 @@ class Ep_Admin_Messages {
 
 				// If locations is set then limit where to show
 				if ( ! empty( $locations ) ) {
-					$do_show = false;
+					
+					$do_show_location = false;
+					#sf_d($locations);
+
+					// Check if location is a post type, i.e. location begins with "post_type:"
+					foreach ($locations as $one_location) {
+						
+						if ( strpos( $one_location, "post_type:" ) !== false ) {
+
+							$location_post_type = str_replace("post_type:", "", $one_location);
+							
+							if ( empty($location_post_type) )
+								continue;
+
+							if ( "post" === $current_screen->base && $location_post_type === $current_screen->post_type )
+								$do_show_location = true;
+
+						}
+					}
+
+					if ( ! $do_show_location )
+						$do_show = false;
+
+					/*
+					post_type:my_post_type
+					post_type:post
+					post_type:page
+					post_type_overview:my_post_type
+					post_type_overview:page
+					taxonomy:my_taxonomy
+					dashboard
+					user
+					profile
+					plugin
+
+					Array
+					(
+					    [0] => page
+					    [1] => post
+					    [2] => taxonomy
+					    [3] => user
+					    [4] => plugin
+					    [5] => my_post_type
+					    [6] => dashboard
+					    [7] => my_post_type:overview
+					    [10] => aaa
+					    [12] => bbb
+					)
+					*/
 				}
 
 				// If capabilites is set then limit who to show to
 				if ( ! empty( $capabilites ) ) {
-					$do_show = false;
+					#$do_show = false;
 				}
 				
 				// If post_slugs is set then limit who to show to
 				if ( ! empty( $post_slugs ) ) {
-					$do_show = false;
+					#$do_show = false;
 				}
 
 				// Show message at admin_notices/top
