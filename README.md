@@ -8,10 +8,13 @@ Plugin från EarthPeople för att informera kunder om saker i admin.
 ## Todo
 
  - [x] Get the plugin the kinda work
- - [ ] Add option so messages can be put in metabox on dashboard and post type
+ - [x] Add option so messages can be put in metabox on dashboard and post type
+ - [ ] All messages should fit in one metabox
+ - [ ] Show info on mouse over, telling who can see the box (so admin can be sure that json capability filter is being read)
  - [ ] Write this file in english
  - [ ] Make this file a proper wp readme
  - [ ] Add files for translation
+ - [ ] Update example config with all options
  - [ ] Make a build script that automagically pushes a new svn version based on this git version
 
 ## Tankar och idéer:
