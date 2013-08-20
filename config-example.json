@@ -43,6 +43,10 @@
       "location": "dashboard"
     },
     {
+      "message": "På dashboard syns jag, för alla användare, fast i en metabox",
+      "location": "dashboard_metabox"
+    },
+    {
       "message": "This will be shown on <strong>plugins overview page</strong>",
       "location": "plugins"
     },

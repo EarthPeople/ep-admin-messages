@@ -118,27 +118,34 @@ class Ep_Admin_Messages {
 
 							if ( "post" === $current_screen->base && $location_post_type === $current_screen->post_type ) {
 								$do_show_location = true;
-								$position = "meta_box";
+								$position = "metabox";
 							}
 
 						} elseif ( "dashboard" === $one_location ) {
 
-							if ( "dashboard" === $current_screen->base  )
+							if ( "dashboard" === $current_screen->base )
 								$do_show_location = true;
+
+						} elseif ( "dashboard_metabox" === $one_location ) {
+
+							if ( "dashboard" === $current_screen->base ) {
+								$do_show_location = true;
+								$position = "dashboard_metabox";
+							}
 
 						} elseif ( "plugins" === $one_location ) {
 
-							if ( "plugins" === $current_screen->base  )
+							if ( "plugins" === $current_screen->base )
 								$do_show_location = true;
 
 						} elseif ( "users" === $one_location ) {
 
-							if ( "users" === $current_screen->base  )
+							if ( "users" === $current_screen->base )
 								$do_show_location = true;
 
 						} elseif ( "profile" === $one_location ) {
 
-							if ( "profile" === $current_screen->base  )
+							if ( "profile" === $current_screen->base )
 								$do_show_location = true;
 						
 						} // if check locations
@@ -222,17 +229,23 @@ class Ep_Admin_Messages {
 							<?php
 						});
 
-					} elseif ( "meta_box" === $position ) {
+					} elseif ( "metabox" === $position || "dashboard_metabox" === $position ) {
 
 						// Show message in a meta box on the edit post screen
-						$meta_box_priority = "high"; // high', 'core', 'default' or 'low'
-						$meta_box_title = __("Admin Message", "ep-admin-message");
-						$meta_box_id = "ep-admin-message-" . md5( json_encode($one_message) );
-						add_meta_box( $meta_box_id, $meta_box_title, function() use ($one_message, $message_to_show) {
+						$metabox_priority = "high"; // high', 'core', 'default' or 'low'
+						$metabox_title = __("Admin Message", "ep-admin-message");
+						$metabox_id = "ep-admin-message-" . md5( json_encode($one_message) );
+
+						if ( "metabox" === $position )
+							$metabox_post_type = $post->post_type;
+						elseif ( "dashboard_metabox" === $position )
+							$metabox_post_type = "dashboard";					
+
+						add_meta_box( $metabox_id, $metabox_title, function() use ($one_message, $message_to_show) {
 							?>
 							<?php echo $message_to_show ?>
 							<?php
-						}, $post->post_type, "side", $meta_box_priority );
+						}, $metabox_post_type, "side", $metabox_priority );
 
 					}
 
