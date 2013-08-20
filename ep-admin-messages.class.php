@@ -150,7 +150,24 @@ class Ep_Admin_Messages {
 							if ( "dashboard" === $current_screen->base  )
 								$do_show_location = true;
 
-						}
+						} elseif ( "plugins" === $one_location ) {
+
+							if ( "plugins" === $current_screen->base  )
+								$do_show_location = true;
+
+						} elseif ( "users" === $one_location ) {
+
+							if ( "users" === $current_screen->base  )
+								$do_show_location = true;
+
+						} elseif ( "profile" === $one_location ) {
+
+							if ( "profile" === $current_screen->base  )
+								$do_show_location = true;
+						
+						} // if check locations
+						
+						#sf_d( $current_screen );
 
 					}
 
