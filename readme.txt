@@ -47,7 +47,7 @@ This means that there are no settings for the user to change. This also means th
 
 To give you an idea what this plugin may be used for, I'll give you a list of what I do with it.
 
-I'm using EP Simple Messags to:
+I'm using EP Simple Messages to:
 
 * ... write documentation for users and developers.
 * ... show editors what [Mustache tags](http://mustache.github.io/) are available for a specific post (controlled by post slug). You know, things like `{{user.firstname}}` or `{{campaign.name}}`, that there is no way that they (or I!) will ever remember.
