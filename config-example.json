@@ -1,92 +1,78 @@
 {
   "messages": [
     {
-      "message": "Detta meddelande syns överst överallt, för alla användare"
+      "message": "This message is visible on all screens, for all users."
     },
     {
-      "message": "Jag syns bara på <strong>sidor</strong> eller på <strong>js error logs</strong>",
-      "location": "post_type:page, post_type:js_error_log"
+      "message": "This message is visible when someone edits a <strong>page</strong> or a post of type </strong>custom post type called <strong>custom_post_type</strong>.",
+      "location": "post_type:page, post_type:custom_post_type"
     },
     {
       "message": [
-        "<p>Jag syns bara på <strong>sidor</strong> eller på <strong>js error logs</strong></p>",
-        "<p>Dessutom visas jag i en metabox i högerspalten</p>",
-        "<p>Och jag har en massa html-kod i mig + jag är uppdelad på flera rader i JSON-filen, för ökad läsbarhet.</p>",
+        "<p>This message is visible when a user edits a <strong>page</strong> or a post type with the name <strong>custom_post_type</strong>.</p>",
+        "<p>The message is shown in a metbox in the right column",
+        "and is also has a lot of HTML-code in it.</p>",
         "<h2>Here comes a definition list</h2>",
         "<dl>",
-        "<dt>Term one</dt>",
-        "<dd>Data text for the above term</dd>",
+        "<dt>Definition term one</dt>",
+        "<dd>Data description for the above term</dd>",
         "<dt>Another term comes here</dt>",
-        "<dd>Some text for this term: Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas, reiciendis, autem, incidunt nemo magnam cupiditate sequi quo aperiam dignissimos fuga minus facere ducimus sunt quos similique. Officiis ad sunt recusandae.</dd>",
+        "<dd>Some text for this term: Lorem ipsum dolor sit amet, consectetur adipisicing elit.</dd>",
         "</dl>",
-        "<h2>Unordered lists work fine too</h2>",
-        "<ul>",
-        "<li>First list item</li>",
-        "<li>Second list item</li>",
-        "<li>List item <em>n</em>",
-        "</ul>",
-        "<h2>And ordered lists too</h2>",
+        "<h2>Ordered lists can be used</h2>",
         "<ol>",
         "<li>First list item</li>",
         "<li>Second list item</li>",
         "<li>List item <em>n</em></li>",
-        "</ol>"
+        "</ol>",
+        "<h2>Images work fine too</h2>",
+        "<p><img src='http://lorempixel.com/95/95/' alt='Dummy image from lorempixel.com' widht=100 height=100>"
       ],
-      "location": "post_type_metabox:page, post_type_metabox:js_error_log"
+      "location": "post_type_metabox:page, post_type_metabox:custom_post_type"
     },
     {
-      "message": "Jag syns bara på <em>översikttsidan</em> för <strong>sidor</strong> eller <strong>js error logs</strong>",
-      "location": "post_type_overview:page, post_type_overview:js_error_log"
+      "message": "This message if visible on the <em>posts overview page</em> for <strong>pages</strong> and the custom post type with name <strong>custom_post_type</strong>.",
+      "location": "post_type_overview:page, post_type_overview:custom_post_type"
     },
     {
-      "message": "På dashboard syns jag, för alla användare",
+      "message": "This message is shown at the top of the dashboard, for all users.",
       "location": "dashboard"
     },
     {
-      "message": "På dashboard syns jag, för alla användare, fast i en metabox",
+      "message": [
+        "<p>This message is shown on the dashboard in a metabox. It is shown to all users.</p>",
+        "<p>This is a good place to add some HTML to a message.</p>",
+        "<p>You can use all <strong>kinds</strong> of <em>HTML</em> is <a href='#'>ok to have</a>.",
+        "<p>Even images are ok:<br><img src='http://lorempixel.com/95/95/' alt='Dummy image from lorempixel.com' widht=100 height=100>"
+      ],
       "location": "dashboard_metabox"
     },
     {
-      "message": "This will be shown on <strong>plugins overview page</strong>",
-      "location": "plugins"
+      "message": "This message is shown on the plugins, users and profile screens.",
+      "location": "plugins, users, profile"
     },
     {
-      "message": "This text will be visible on users overview screen",
-      "location": "users"
-    },
-    {
-      "message": "This text will be visible on a single user profile page",
-      "location": "profile"
-    },
-    {
-      "message": "Denna post type används för att ... kort info på översiktssidan för en post type",
-      "location": "my_post_type-overview"
-    },
-    {
-      "message": "Jag syns på sidor som har en slug/permalänk som börjar med footer- eller header-",
-      "location": "page",
+      "message": "This message is shown only when a user edits a page, and that page has a slug/permalink that begins with <code>footer-</code> or <code>header-</code>.",
+      "location": "post_type:page",
       "post_slug": "footer-*, header-*"
     },
     {
-      "message": "Information kan äves visas bara för vissa användare, beroende på capability. Jag syns bara på dashboard och för användare med capability <em>manage_options</em>",
+      "message": "This message is shown on the dasboard, but only for users that has capability <code>manage_options</code>.",
       "capability": "manage_options",
       "location": "dashboard"
     },
     {
       "message": [
-        "Detta meddelande syns bara på poster av typen page eller my_custom_post_type.",
-        "Det syns på höger sida, och är synlig bara för användare som får redigera sidor eller hantera inställningar. ",
-        "Dock är meddelandet begränsat så det bara syns på sidor som har slug my_slug eller en slug som börjar med texts-header"
+        "<p>This message is shown when editing pages. It is shown in a metabox in the right column.</p>",
+        "<p>It's only visible for users who has capability <code>edit_posts</code> or <code>manage_options</code>.</p>",
+        "<p>And finally it's also only visible for posts that have a slug/permalink that begins with <code>header-</code>.</p>"
       ],
-      "location": "post_type_metabox:page, post_type:my_custom_post_type",
-      "capability": "edit_posts,manage_options",
-      "post_slug": "my-slug,texts-header-*"
+      "location": "post_type_metabox:page",
+      "capability": "edit_posts, manage_options",
+      "post_slug": "header-*"
     },
     {
-      "message": "I will be shown on pages or posts with a slug that begins with text-*",
-      "post_slug": "text-*"
-    },
-    {
+      "_Not done yet": "This section is not done yet.",
       "message_en-US": "This message will be shown only to admin users with en-US as their admin language",
       "message_sv-SE": "Detta meddelande syns endast för admins med svenska som språk"
     }

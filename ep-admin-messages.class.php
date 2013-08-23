@@ -5,7 +5,7 @@
  */
 class Ep_Admin_Messages {
 
-	private $config_file = "ep-config.json";
+	private $config_file = ".ep-config.json";
 	private $config = array();
 	private $plugin_name = "EP Admin Messages";
 
@@ -31,13 +31,20 @@ class Ep_Admin_Messages {
 		// If current screen is showing a post then get the post
 		if ( "post" === $current_screen->base ) {
 			
-			$post_id = 0;
-			if ( isset( $_GET['post'] ) )
-			 	$post_id = $post_ID = (int) $_GET['post'];
-			elseif ( isset( $_POST['post_ID'] ) )
+			
+			// Get post type and possibly post name
+			if ( isset( $_GET['post'] ) ) {
+				$post_id = $post_ID = (int) $_GET['post'];
+				$post = get_post($post_id);
+			} elseif ( isset( $_POST['post_ID'] ) ) {
 			 	$post_id = $post_ID = (int) $_POST['post_ID'];
-
-			 $post = get_post($post_id);
+				$post = get_post($post_id);
+			} elseif ( "post" === $current_screen->base && "add" === $current_screen->action ) {
+				// Creating new post. Post ID not set yet.
+				// Create a stdClass with just post_type added
+				$post = new stdClass;
+				$post->post_type = $_GET["post_type"];
+			}
 
 		 }
 
@@ -185,7 +192,7 @@ class Ep_Admin_Messages {
 
 					$do_show_post_slug = false;
 
-					if ( ! empty( $post ) ) {
+					if ( ! empty( $post ) && isset( $post->post_name ) ) {
 					
 						foreach ( $post_slugs as $one_slug ) {
 
