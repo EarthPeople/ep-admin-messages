@@ -52,7 +52,7 @@ Messages can be limited to only be shown on posts that match a specific slug, or
 This way it's easy to for example show page specific information, letting a user know what a page is for, what they should put in in, and so on.
 
 
-= Config file uses JSON =
+= JSON-based config file =
 
 All settings are configured with a config file that uses JSON and that you put in the themes directory.
 
