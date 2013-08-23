@@ -81,7 +81,7 @@ The [source code for EP Admin Messages](https://github.com/EarthPeople/ep-admin-
 1. Upload the plugin folder to your `/wp-content/plugins/` directory.
 1. Activate the plugin through the 'Plugins' menu in WordPress.
 1. Add a file called `.ep-config.json` to your theme directory. This file contains your config in JSON-format. 
-1. Optional: update your `.htaccess` to disable access to the config file used by this plugin (if you don't do this everyone with access to your site can read your messages):
+1. Optional: update your `.htaccess` to disable access to the config file used by this plugin (if you don't do this everyone with access to your site may be able to read your messages):
 
 `
 # Forbid access to all files beginning with a dot (.).
