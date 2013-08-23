@@ -1,7 +1,8 @@
 EP Admin Messages for WordPress
 ===============================
 
-A plugin for WordPress to show messages in the WP Admin. Messages are controlled using a JSON-config file, so it can be automatically updated when pushing with GIT and so on.
+Plugin for WordPress that shows messages in the WordPress admin area.
+Messages are created and controlled using a JSON-config file, so it can be automatically updated when pushing with GIT and so on.
 
 Different messages can be shown at diffent locations, for different users, and even for different posts.
 
