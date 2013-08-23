@@ -55,6 +55,9 @@ EP Simple Messages can be used to…
 * … show a message on the dashboard with support info, like who made the site and who they should contact for support questions.
 * … let the user know what shortcodes that are available for all posts.
 
+= Open source =
+
+The [source code for EP Admin Messages](https://github.com/EarthPeople/ep-admin-messages) is available at GitHub.
 
 == Installation ==
 
