@@ -69,6 +69,10 @@ class Ep_Admin_Messages {
 				if (! empty($one_message->user_id) )
 					$user_ids = $this->get_array_from_string( $one_message->user_id );
 
+				$usernames = array();
+				if (! empty($one_message->username) )
+					$usernames = $this->get_array_from_string( $one_message->username );
+
 				// Detect language
 				// @todo: Actually detect language
 				$message_to_show = "";
@@ -237,6 +241,21 @@ class Ep_Admin_Messages {
 
 					if ( ! $do_show_user )
 						$do_show = false;
+
+				}
+
+				// If username is set then only show to user with that username
+				if ( ! empty( $usernames ) ) {
+
+					$do_show_user = false;
+
+					$current_user = wp_get_current_user();
+					if ( in_array( $current_user->data->user_login, $usernames ) )
+						$do_show_user = true;
+
+					if ( ! $do_show_user )
+						$do_show = false;
+
 
 				}
 

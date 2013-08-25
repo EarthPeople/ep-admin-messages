@@ -1,11 +1,15 @@
 {
   "messages": [
     {
+      "message": "This message is visible on all screens, for all users."
+    },
+    {
       "message": "This message is shown on all screen, but only for the user with id 1.",
       "user_id": 1
     },
     {
-      "message": "This message is visible on all screens, for all users."
+      "message": "This message is shown on all screen, but only for the user with the username <code>admin</code>.",
+      "username": "admin"
     },
     {
       "message": "This message is visible when someone edits a <strong>page</strong> or a post of type </strong>custom post type called <strong>custom_post_type</strong>.",
