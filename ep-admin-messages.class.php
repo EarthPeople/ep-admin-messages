@@ -31,7 +31,6 @@ class Ep_Admin_Messages {
 		// If current screen is showing a post then get the post
 		if ( "post" === $current_screen->base ) {
 			
-			
 			// Get post type and possibly post name
 			if ( isset( $_GET['post'] ) ) {
 				$post_id = $post_ID = (int) $_GET['post'];
@@ -53,6 +52,7 @@ class Ep_Admin_Messages {
 			foreach ( $this->config->messages as $one_message ) {
 			
 				// Get settings for message
+
 				$locations = array();
 				if (! empty($one_message->location) )
 					$locations = $this->get_array_from_string( $one_message->location );
@@ -64,6 +64,10 @@ class Ep_Admin_Messages {
 				$capabilities = array();
 				if (! empty($one_message->capability) )
 					$capabilities = $this->get_array_from_string( $one_message->capability );
+
+				$user_ids = array();
+				if (! empty($one_message->user_id) )
+					$user_ids = $this->get_array_from_string( $one_message->user_id );
 
 				// Detect language
 				// @todo: Actually detect language
@@ -218,6 +222,20 @@ class Ep_Admin_Messages {
 					} // if not empty post
 
 					if ( ! $do_show_post_slug )
+						$do_show = false;
+
+				}
+
+				// If user_id is set then show only to users with that id
+				if ( ! empty( $user_ids ) ) {
+					
+					$do_show_user = false;
+
+					$current_user = wp_get_current_user();
+					if ( in_array( $current_user->ID, $user_ids ) )
+						$do_show_user = true;
+
+					if ( ! $do_show_user )
 						$do_show = false;
 
 				}

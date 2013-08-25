@@ -54,7 +54,7 @@ This way it's easy to for example show page specific information, letting a user
 
 = JSON-based config file =
 
-All settings are configured with a config file that uses JSON and that you put in the themes directory.
+All settings are configured with a config file ([view example config](https://github.com/EarthPeople/ep-admin-messages/blob/master/ep-config-example.json)) that uses JSON and that you put in the themes directory.
 
 This means that there are no settings for the user to change. This also means that you can add messages using your regular deploy method. Just upload an updated config file and you're done. No database syncing needed; hooray!
 
