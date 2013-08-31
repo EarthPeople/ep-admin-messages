@@ -4,11 +4,16 @@
       "message": "This message is visible on all screens, for all users."
     },
     {
-      "message": "This message is shown on all screen, but only for the user with id 1.",
+      "message": "This message is shown on all screens, but only for users with role <code>editor</code> or <code>author</code>.",
+      "user_role": "editor,author",
+      "location": "dashboard"
+    },
+    {
+      "message": "This message is shown on all screens, but only for the user with id 1.",
       "user_id": 1
     },
     {
-      "message": "This message is shown on all screen, but only for the user with the username <code>admin</code>.",
+      "message": "This message is shown on all screens, but only for the user with the username <code>admin</code>.",
       "username": "admin"
     },
     {

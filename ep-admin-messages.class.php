@@ -47,259 +47,296 @@ class Ep_Admin_Messages {
 
 		 }
 
-		if ( isset( $this->config->messages ) ) {
+		if ( ! isset( $this->config->messages ) || ! is_array( $this->config->messages ) ) 
+			return false;
 
-			foreach ( $this->config->messages as $one_message ) {
+		foreach ( $this->config->messages as $one_message ) {
+		
+			// Get settings for message
+			// @todo: apparently i'm doing the same thing multple times here...
+			// make an array with the keys to get and just get'em!
+			$settings_to_get = array(
+				"locations" => "location",
+				"post_slugs" => "post_slug",
+				"capabilities" => "capability",
+				"user_ids" => "user_id",
+				"usernames" => "username",
+				"user_roles" => "user_role"
+			);
+
+			// Dynamically create variables as defined in $settings_to_get
+			foreach ( $settings_to_get as $settings_key => $settings_value ) {
+
+				${$settings_key} = array();
+				if (! empty($one_message->{$settings_value} ) )
+					${$settings_key}  = $this->get_array_from_string( $one_message->{$settings_value}  );
+
+			}
+
+
+			// Detect language
+			// @todo: Actually detect language
+			$message_to_show = "";
+			if ( ! empty( $one_message->message ) ) {
+				$message_to_show = $one_message->message;
+				if ( is_array($message_to_show)) $message_to_show = join($message_to_show);
+			}
+
 			
-				// Get settings for message
+			// Determine if message should be shown on current screen
+			// By default all messages are shown
+			$do_show = true;
+			$position = "admin_notices";
 
-				$locations = array();
-				if (! empty($one_message->location) )
-					$locations = $this->get_array_from_string( $one_message->location );
+			// First of all we must have a message to show
+			if ( empty( $message_to_show ) )
+				continue;
 
-				$post_slugs = array();
-				if (! empty($one_message->post_slug) )
-					$post_slugs = $this->get_array_from_string( $one_message->post_slug );
+			// If locations is set then limit where to show
+			if ( ! empty( $locations ) ) {
+				
+				$do_show_location = false;
 
-				$capabilities = array();
-				if (! empty($one_message->capability) )
-					$capabilities = $this->get_array_from_string( $one_message->capability );
+				foreach ($locations as $one_location) {
+					
+					if ( strpos( $one_location, "post_type:" ) !== false ) {
 
-				$user_ids = array();
-				if (! empty($one_message->user_id) )
-					$user_ids = $this->get_array_from_string( $one_message->user_id );
+						// Location is a post type, i.e. location begins with "post_type:"
 
-				$usernames = array();
-				if (! empty($one_message->username) )
-					$usernames = $this->get_array_from_string( $one_message->username );
+						$location_post_type = str_replace("post_type:", "", $one_location);
+						
+						if ( empty($location_post_type) )
+							continue;
 
-				// Detect language
-				// @todo: Actually detect language
-				$message_to_show = "";
-				if ( ! empty( $one_message->message ) ) {
-					$message_to_show = $one_message->message;
-					if ( is_array($message_to_show)) $message_to_show = join($message_to_show);
+						if ( "post" === $current_screen->base && $location_post_type === $current_screen->post_type )
+							$do_show_location = true;
+
+					} elseif ( strpos( $one_location, "post_type_overview:" ) !== false ) {
+						
+						// Location is a post type overview screen
+
+						$location_post_type = str_replace("post_type_overview:", "", $one_location);
+						
+						if ( empty($location_post_type) )
+							continue;
+
+						if ( "edit" === $current_screen->base && $location_post_type === $current_screen->post_type )
+							$do_show_location = true;
+
+					} elseif ( strpos( $one_location, "post_type_metabox:" ) !== false ) {
+						
+						// Location is a post type overview screen
+
+						$location_post_type = str_replace("post_type_metabox:", "", $one_location);
+
+						if ( empty($location_post_type) )
+							continue;
+
+						if ( "post" === $current_screen->base && $location_post_type === $current_screen->post_type ) {
+							$do_show_location = true;
+							$position = "metabox";
+						}
+
+					} elseif ( "dashboard" === $one_location ) {
+
+						if ( "dashboard" === $current_screen->base )
+							$do_show_location = true;
+
+					} elseif ( "dashboard_metabox" === $one_location ) {
+
+						if ( "dashboard" === $current_screen->base ) {
+							$do_show_location = true;
+							$position = "dashboard_metabox";
+						}
+
+					} elseif ( "plugins" === $one_location ) {
+
+						if ( "plugins" === $current_screen->base )
+							$do_show_location = true;
+
+					} elseif ( "users" === $one_location ) {
+
+						if ( "users" === $current_screen->base )
+							$do_show_location = true;
+
+					} elseif ( "profile" === $one_location ) {
+
+						if ( "profile" === $current_screen->base )
+							$do_show_location = true;
+					
+					} // if check locations
+
+					// @todo: should we just be able to query any screen in the config?
+					// Like: "screen_base:upload"
+					// However problems with multiple conditions
+
 				}
 
-				
-				// Determine if message should be shown on current screen
-				// By default all messages are shown
-				$do_show = true;
-				$position = "admin_notices";
+				if ( ! $do_show_location )
+					$do_show = false;
 
-				// First of all we must have a message to show
-				if ( empty( $message_to_show ) )
-					continue;
+			}
 
-				// If locations is set then limit where to show
-				if ( ! empty( $locations ) ) {
-					
-					$do_show_location = false;
+			// If capabilites is set then limit who to show to
+			// User need to have at least of the capabilities
+			if ( ! empty( $capabilities ) ) {
 
-					foreach ($locations as $one_location) {
-						
-						if ( strpos( $one_location, "post_type:" ) !== false ) {
+				$do_show_capability = false;
 
-							// Location is a post type, i.e. location begins with "post_type:"
+				foreach ( $capabilities as $one_capability ) {
 
-							$location_post_type = str_replace("post_type:", "", $one_location);
-							
-							if ( empty($location_post_type) )
-								continue;
-
-							if ( "post" === $current_screen->base && $location_post_type === $current_screen->post_type )
-								$do_show_location = true;
-
-						} elseif ( strpos( $one_location, "post_type_overview:" ) !== false ) {
-							
-							// Location is a post type overview screen
-
-							$location_post_type = str_replace("post_type_overview:", "", $one_location);
-							
-							if ( empty($location_post_type) )
-								continue;
-
-							if ( "edit" === $current_screen->base && $location_post_type === $current_screen->post_type )
-								$do_show_location = true;
-
-						} elseif ( strpos( $one_location, "post_type_metabox:" ) !== false ) {
-							
-							// Location is a post type overview screen
-
-							$location_post_type = str_replace("post_type_metabox:", "", $one_location);
-
-							if ( empty($location_post_type) )
-								continue;
-
-							if ( "post" === $current_screen->base && $location_post_type === $current_screen->post_type ) {
-								$do_show_location = true;
-								$position = "metabox";
-							}
-
-						} elseif ( "dashboard" === $one_location ) {
-
-							if ( "dashboard" === $current_screen->base )
-								$do_show_location = true;
-
-						} elseif ( "dashboard_metabox" === $one_location ) {
-
-							if ( "dashboard" === $current_screen->base ) {
-								$do_show_location = true;
-								$position = "dashboard_metabox";
-							}
-
-						} elseif ( "plugins" === $one_location ) {
-
-							if ( "plugins" === $current_screen->base )
-								$do_show_location = true;
-
-						} elseif ( "users" === $one_location ) {
-
-							if ( "users" === $current_screen->base )
-								$do_show_location = true;
-
-						} elseif ( "profile" === $one_location ) {
-
-							if ( "profile" === $current_screen->base )
-								$do_show_location = true;
-						
-						} // if check locations
-
-						// @todo: should we just be able to query any screen in the config?
-						// Like: "screen_base:upload"
-						// However problems with multiple conditions
-
+					if ( current_user_can( $one_capability ) ) {
+						$do_show_capability = true;
+						break;
 					}
 
-					if ( ! $do_show_location )
-						$do_show = false;
-
 				}
 
-				// If capabilites is set then limit who to show to
-				// User need to have at least of the capabilities
-				if ( ! empty( $capabilities ) ) {
+				if ( ! $do_show_capability )
+					$do_show = false;
+			}
+			
+			// If post_slugs is set then limit who to show to
+			if ( ! empty( $post_slugs ) ) {
 
-					$do_show_capability = false;
+				$do_show_post_slug = false;
 
-					foreach ( $capabilities as $one_capability ) {
+				if ( ! empty( $post ) && isset( $post->post_name ) ) {
+				
+					foreach ( $post_slugs as $one_slug ) {
 
-						if ( current_user_can( $one_capability ) ) {
-							$do_show_capability = true;
+						// check post slug for exact match 
+						if ( $one_slug === $post->post_name ) {
+							$do_show_post_slug = true;
 							break;
 						}
 
-					}
-
-					if ( ! $do_show_capability )
-						$do_show = false;
-				}
-				
-				// If post_slugs is set then limit who to show to
-				if ( ! empty( $post_slugs ) ) {
-
-					$do_show_post_slug = false;
-
-					if ( ! empty( $post ) && isset( $post->post_name ) ) {
-					
-						foreach ( $post_slugs as $one_slug ) {
-
-							// check post slug for exact match 
-							if ( $one_slug === $post->post_name ) {
+						// check post slug for partial match, if one_slug ends with wildcard (*)
+						if ( strpos( $one_slug, "*" ) !== false ) {
+							
+							// found a wildcard, match a regexp out of it
+							$regexp = "/" . str_replace("*", ".+", $one_slug) . "/";
+							if ( preg_match($regexp, $post->post_name) === 1) {
 								$do_show_post_slug = true;
 								break;
 							}
 
-							// check post slug for partial match, if one_slug ends with wildcard (*)
-							if ( strpos( $one_slug, "*" ) !== false ) {
-								
-								// found a wildcard, match a regexp out of it
-								$regexp = "/" . str_replace("*", ".+", $one_slug) . "/";
-								if ( preg_match($regexp, $post->post_name) === 1) {
-									$do_show_post_slug = true;
-									break;
-								}
-
-							}
 						}
-
-					} // if not empty post
-
-					if ( ! $do_show_post_slug )
-						$do_show = false;
-
-				}
-
-				// If user_id is set then show only to users with that id
-				if ( ! empty( $user_ids ) ) {
-					
-					$do_show_user = false;
-
-					$current_user = wp_get_current_user();
-					if ( in_array( $current_user->ID, $user_ids ) )
-						$do_show_user = true;
-
-					if ( ! $do_show_user )
-						$do_show = false;
-
-				}
-
-				// If username is set then only show to user with that username
-				if ( ! empty( $usernames ) ) {
-
-					$do_show_user = false;
-
-					$current_user = wp_get_current_user();
-					if ( in_array( $current_user->data->user_login, $usernames ) )
-						$do_show_user = true;
-
-					if ( ! $do_show_user )
-						$do_show = false;
-
-
-				}
-
-				if ( $do_show ) {
-
-					if ( "admin_notices" === $position ) {
-					
-						// Show message at admin_notices/top
-						// Works for all screens
-						add_action("admin_notices", function() use ($one_message, $message_to_show) {
-							?>
-							<div class="updated">
-								<p><?php echo $message_to_show ?></p>
-							</div>
-							<?php
-						});
-
-					} elseif ( "metabox" === $position || "dashboard_metabox" === $position ) {
-
-						// Show message in a meta box on the edit post screen
-						$metabox_priority = "high"; // high', 'core', 'default' or 'low'
-						$metabox_title = __("Admin Message", "ep-admin-message");
-						$metabox_id = "ep-admin-message-" . md5( json_encode($one_message) );
-
-						if ( "metabox" === $position )
-							$metabox_post_type = $post->post_type;
-						elseif ( "dashboard_metabox" === $position )
-							$metabox_post_type = "dashboard";					
-
-						add_meta_box( $metabox_id, $metabox_title, function() use ($one_message, $message_to_show) {
-							?>
-							<?php echo $message_to_show ?>
-							<?php
-						}, $metabox_post_type, "side", $metabox_priority );
-
 					}
 
-				}
+				} // if not empty post
+
+				if ( ! $do_show_post_slug )
+					$do_show = false;
 
 			}
 
-		}
+			// If user_id is set then show only to users with that id
+			if ( ! empty( $user_ids ) ) {
+				
+				$do_show_user = false;
 
+				$current_user = wp_get_current_user();
+				if ( in_array( $current_user->ID, $user_ids ) )
+					$do_show_user = true;
+
+				if ( ! $do_show_user )
+					$do_show = false;
+
+			}
+
+			// If username is set then only show to user with that username
+			if ( ! empty( $usernames ) ) {
+
+				$do_show_user = false;
+
+				$current_user = wp_get_current_user();
+				if ( in_array( $current_user->data->user_login, $usernames ) )
+					$do_show_user = true;
+
+				if ( ! $do_show_user )
+					$do_show = false;
+
+
+			}
+
+			// If show message by user role
+			if ( ! empty($user_roles) ) {
+
+				$do_show_user = false;
+
+				// get current user
+				$current_user = wp_get_current_user();
+				foreach ( $user_roles as $one_role ) {
+					if ( $this->user_has_role( $current_user->ID, $one_role ) ) {
+						$do_show_user = true;
+						break;
+					}
+				}
+
+				if ( ! $do_show_user )
+					$do_show = false;
+
+			}
+
+			// end check settings things
+
+			// If message is to be shown
+			if ( $do_show ) {
+
+				if ( "admin_notices" === $position ) {
+				
+					// Show message at admin_notices/top
+					// Works for all screens
+					add_action("admin_notices", function() use ($one_message, $message_to_show) {
+						?>
+						<div class="updated">
+							<p><?php echo $message_to_show ?></p>
+						</div>
+						<?php
+					});
+
+				} elseif ( "metabox" === $position || "dashboard_metabox" === $position ) {
+
+					// Show message in a meta box on the edit post screen
+					$metabox_priority = "high"; // high', 'core', 'default' or 'low'
+					$metabox_title = __("Admin Message", "ep-admin-message");
+					$metabox_id = "ep-admin-message-" . md5( json_encode($one_message) );
+
+					if ( "metabox" === $position )
+						$metabox_post_type = $post->post_type;
+					elseif ( "dashboard_metabox" === $position )
+						$metabox_post_type = "dashboard";					
+
+					add_meta_box( $metabox_id, $metabox_title, function() use ($one_message, $message_to_show) {
+						?>
+						<?php echo $message_to_show ?>
+						<?php
+					}, $metabox_post_type, "side", $metabox_priority );
+
+				}
+
+			} // is show message
+
+		} // if message is set
+
+	} // setup messages
+
+	/**
+	 * check if user has a role
+	 * @param $user_id
+	 * @param $role
+	 */
+	function user_has_role( $user_id, $role ) {
+	 
+		$user = get_userdata( $user_id );
+
+		if ( empty( $user ) )
+			return false;
+
+		return in_array( $role, (array) $user->roles );
 	}
+ 
 
 	/**
 	 * Convert from comma separated string to array. Trims whitespace and removes empty values.
@@ -343,19 +380,27 @@ class Ep_Admin_Messages {
 	}
 
 	function message_config_file_error() {
+		
+		$msg = '%1$s: Config file <code>%2$s</code> does not contain a valid JSON configuration. Take a look at the <a href="%3$s">example config</a> to understand the config format and what you can do.';
+		$example_file_url = "https://github.com/EarthPeople/ep-admin-messages/blob/master/ep-config-example.json";
 		?>
 		<div class="error">
-			<p><?php echo sprintf( __( '%1$s: Config file "%2$s" does not contain valid JSON.', 'ep-admin-messages' ), $this->plugin_name, $this->config_file ); ?></p>
+			<p><?php echo sprintf( __( $msg, 'ep-admin-messages' ), $this->plugin_name, $this->config_file, $example_file_url ); ?></p>
 		</div>
-		<?php		
+		<?php
+
 	}
 
 	function message_no_config_file_found() {
+
+		$msg = '%1$s: Could not find config file <code>%2$s</code> in your theme directory. Please create config file and try again. Take a look at the <a href="%3$s">example config</a> to understand the config format and what you can do.';
+		$example_file_url = "https://github.com/EarthPeople/ep-admin-messages/blob/master/ep-config-example.json";
 		?>
 		<div class="error">
-			<p><?php echo sprintf( __( '%1$s: Could not find config file "%2$s" in your theme directory.', 'ep-admin-messages' ), $this->plugin_name, $this->config_file ); ?></p>
+			<p><?php echo sprintf( __( $msg, 'ep-admin-messages' ), $this->plugin_name, $this->config_file, $example_file_url ); ?></p>
 		</div>
 		<?php
+
 	}
 
 }

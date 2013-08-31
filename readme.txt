@@ -6,7 +6,7 @@ License URI: http://www.gnu.org/licenses/gpl.html
 Tags: admin, wp admin, wordpress admin, messages, notices, information, client, help, admin notice, admin notices, metabox, developer, developers
 Requires at least: 3.6
 Tested up to: 3.6
-Stable tag: 0.1.2
+Stable tag: 0.1.3
 
 Show messages in WP Admin. Different messages can be shown at different places, for different people.
 
@@ -41,7 +41,7 @@ Each message can be placed in one or several of the following places:
 
 = Messages are only shown to the users that you choose =
 
-Each message can be limited to be shown only to users with a specific [capability](http://codex.wordpress.org/Glossary#Capabilities).
+Each message can be limited to be shown only to users with a specific [capability](http://codex.wordpress.org/Glossary#Capabilities) or [role](http://codex.wordpress.org/Roles_and_Capabilities#Roles).
 
 You can for example show one message to your editors, i.e. users with the capability "edit_posts", and another message to your admins, i.e. users with the capability "manage_options".
 
@@ -99,6 +99,10 @@ RedirectMatch 403 /\..*$
 
 
 == Changelog ==
+
+= 0.1.x =
+
+*  Added support for limiting messages to users based on their role.
 
 = 0.1.2 =
 
