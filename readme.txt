@@ -100,13 +100,14 @@ RedirectMatch 403 /\..*$
 
 == Changelog ==
 
-= 0.1.x =
+= 0.1.3 =
 
-*  Added support for limiting messages to users based on their role.
+* Added support for limiting messages to users based on their role. Usage: ```user_role: "editor,author"```
+* Added support for custom title in metaboxes. Usage: ```"title": "This is the title of the message"```
 
 = 0.1.2 =
 
-* Added support for limiting messages to users based on their ID or their username.
+* Added support for limiting messages to users based on their ID or their username. Usage: ```username: "admin"``
 
 = 0.1.1 =
 

@@ -53,7 +53,6 @@ class Ep_Admin_Messages {
 		foreach ( $this->config->messages as $one_message ) {
 		
 			// Get settings for message
-			// @todo: apparently i'm doing the same thing multple times here...
 			// make an array with the keys to get and just get'em!
 			$settings_to_get = array(
 				"locations" => "location",
@@ -76,12 +75,20 @@ class Ep_Admin_Messages {
 
 			// Detect language
 			// @todo: Actually detect language
+			
+			// Setup message to show
 			$message_to_show = "";
 			if ( ! empty( $one_message->message ) ) {
 				$message_to_show = $one_message->message;
 				if ( is_array($message_to_show)) $message_to_show = join($message_to_show);
 			}
 
+			// Setup message title
+			$message_title_to_show = __("Admin Message", "ep-admin-message");
+			if ( ! empty( $one_message->title ) ) {
+				$message_title_to_show = $one_message->title;
+				if ( is_array($message_title_to_show)) $message_title_to_show = join($message_title_to_show);
+			}
 			
 			// Determine if message should be shown on current screen
 			// By default all messages are shown
@@ -300,7 +307,7 @@ class Ep_Admin_Messages {
 
 					// Show message in a meta box on the edit post screen
 					$metabox_priority = "high"; // high', 'core', 'default' or 'low'
-					$metabox_title = __("Admin Message", "ep-admin-message");
+					$metabox_title = $message_title_to_show;
 					$metabox_id = "ep-admin-message-" . md5( json_encode($one_message) );
 
 					if ( "metabox" === $position )

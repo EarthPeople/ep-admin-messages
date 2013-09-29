@@ -58,7 +58,8 @@
         "<p>You can use all <strong>kinds</strong> of <em>HTML</em>. <a href='#'>Links are ok to have</a>.",
         "<p>Images are ok too:<br><img src='http://lorempixel.com/95/95/' alt='Dummy image from lorempixel.com' widht=100 height=100>"
       ],
-      "location": "dashboard_metabox"
+      "location": "dashboard_metabox",
+      "title": "This is the the text in title of the meta box"
     },
     {
       "message": "This message is shown on the plugins, users and profile screens.",
