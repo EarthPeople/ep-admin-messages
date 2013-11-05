@@ -42,7 +42,7 @@ class Ep_Admin_Messages {
 				// Creating new post. Post ID not set yet.
 				// Create a stdClass with just post_type added
 				$post = new stdClass;
-				$post->post_type = $_GET["post_type"];
+				$post->post_type = $current_screen->post_type;
 			}
 
 		 }

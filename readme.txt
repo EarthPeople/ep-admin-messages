@@ -5,8 +5,8 @@ License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 Tags: admin, wp admin, wordpress admin, messages, notices, information, client, help, admin notice, admin notices, metabox, developer, developers
 Requires at least: 3.6
-Tested up to: 3.6
-Stable tag: 0.1.4
+Tested up to: 3.7.1
+Stable tag: 0.1.5
 
 Show messages in WP Admin. Different messages can be shown at different places, for different people.
 
@@ -99,6 +99,10 @@ RedirectMatch 403 /\..*$
 
 
 == Changelog ==
+
+= 0.1.5 =
+
+* Fixed a notice warning when creating new post
 
 = 0.1.4 =
 
